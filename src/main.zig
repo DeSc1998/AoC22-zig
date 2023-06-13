@@ -6,6 +6,7 @@ const day3 = @import("day3.zig");
 const day4 = @import("day4.zig");
 const day5 = @import("day5.zig");
 const day6 = @import("day6.zig");
+const day7 = @import("day7.zig");
 
 var arena = std.heap.ArenaAllocator.init(std.heap.page_allocator);
 const allocator = arena.allocator();
@@ -55,4 +56,7 @@ pub fn main() !void {
     std.debug.print("day 6 (2): {}\n", .{d6_2});
 
     // Day 7
+    const daySevenData = try util.readEntireFile("input/day7.txt", allocator);
+    std.debug.print("day 7 (1): {!}\n", .{day7.solve1(daySevenData)});
+    std.debug.print("day 7 (2): {!}\n", .{day7.solve2(daySevenData)});
 }

@@ -1,6 +1,6 @@
 const std = @import("std");
 
-fn collect(comptime T: type, splitter: *std.mem.SplitIterator(T), out: *std.ArrayList([]const T)) !void {
+fn collect(comptime T: type, splitter: *std.mem.SplitIterator(T, std.mem.DelimiterType.sequence), out: *std.ArrayList([]const T)) !void {
     while (splitter.next()) |next_val| {
         try out.append(next_val);
     }
@@ -10,7 +10,7 @@ pub fn parseDayOne(contents: []const u8, out: *std.ArrayList(u32), allocator: st
     var bags = std.ArrayList([]const u8).init(allocator);
     defer bags.deinit();
 
-    var bag_splitter = std.mem.split(u8, contents, "\n\n");
+    var bag_splitter = std.mem.splitSequence(u8, contents, "\n\n");
     try collect(u8, &bag_splitter, &bags);
 
     for (bags.items) |bag| {
@@ -63,7 +63,7 @@ pub fn solve1(input: []const u8) !u32 {
     defer list.deinit();
 
     try parseDayOne(input, &list, allocator);
-    std.sort.sort(u32, list.items, .{}, lessThan);
+    std.mem.sort(u32, list.items, .{}, lessThan);
     return list.items[list.items.len - 1];
 }
 
@@ -76,7 +76,7 @@ pub fn solve2(input: []const u8) !u32 {
     defer list.deinit();
 
     try parseDayOne(input, &list, allocator);
-    std.sort.sort(u32, list.items, .{}, lessThan);
+    std.mem.sort(u32, list.items, .{}, lessThan);
     return sum(list.items[list.items.len - 3 .. list.items.len]);
 }
 
