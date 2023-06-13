@@ -33,8 +33,6 @@ fn splitByCommands(input: []const u8, out: *std.ArrayList([]const u8)) !void {
 }
 
 fn parseFile(input: []const u8) !File {
-    //std.debug.print("'{s}'\n", .{input});
-
     var splitter = std.mem.splitAny(u8, input, " ");
     const size = try std.fmt.parseInt(usize, splitter.next().?, 10);
     const name = splitter.next().?;
@@ -142,7 +140,6 @@ fn parse(input: []const u8) !Directory {
             var s = std.mem.splitAny(u8, command[3..], " "); // ignore 'cd '
             const dest = s.next().?;
             const curr = dir_stack.peek().?.*;
-            //std.debug.print("'{s}'\n", .{dest});
             if (findDirByName(dest[0 .. dest.len - 1], curr.entries)) |dir| {
                 try dir_stack.push(dir);
             } else {
@@ -156,7 +153,6 @@ fn parse(input: []const u8) !Directory {
             var dir = dir_stack.peek().?;
             try collectEntries(entries, dir.*);
         } else {
-            //std.debug.print("cmd: '{s}'\n", .{command});
             return error.UnkownCommand;
         }
     }
@@ -200,13 +196,10 @@ pub fn solve1(input: []const u8) !u64 {
     var map = std.ArrayList(File).init(allocator);
 
     const root = try parse(input);
-    //std.debug.print("\n{s}:\n", .{"/"});
-    //try printDirectory(root, 1);
     try mapDirectorySize(root, &map);
 
     var total_sizes: u64 = 0;
     for (map.items) |mapping| {
-        //std.debug.print("{s}: {}\n", .{ mapping.name, mapping.size });
         if (mapping.size <= 100_000) {
             total_sizes += mapping.size;
         }
