@@ -5,9 +5,9 @@ fn mapToBits(items: []const u8) u64 {
     var bits: u64 = 0;
     for (items) |c| {
         if (std.ascii.isUpper(c)) {
-            bits |= @as(u64, 1) << @truncate(u6, c - 'A' + 26);
+            bits |= @as(u64, 1) << @truncate( c - 'A' + 26);
         } else {
-            bits |= @as(u64, 1) << @truncate(u6, c - 'a');
+            bits |= @as(u64, 1) << @truncate( c - 'a');
         }
     }
     return bits;

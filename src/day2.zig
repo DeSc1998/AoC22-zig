@@ -19,14 +19,14 @@ fn parseLineDayTwo(content: []const u8) ?Round {
 
     // zig fmt: off
     return .{
-        .opp = @intToEnum(MoveType, content[0] - 'A'),
-        .move = @intToEnum(MoveType, content[2] - 'X') };
+        .opp = @enumFromInt( content[0] - 'A'),
+        .move = @enumFromInt( content[2] - 'X') };
     // zig fmt: on
 }
 
 fn score(opponent: MoveType, move: MoveType) u32 {
-    const opp = @enumToInt(opponent);
-    const self = @enumToInt(move);
+    const opp = @intFromEnum(opponent);
+    const self = @intFromEnum(move);
     if (opponent == move) { // draw
         return 3 + self + 1;
     }
@@ -37,7 +37,7 @@ fn score(opponent: MoveType, move: MoveType) u32 {
 }
 
 fn scoreTarget(opponent: MoveType, target: MoveType) u32 {
-    const opp = @enumToInt(opponent);
+    const opp = @intFromEnum(opponent);
     return switch (target) {
         .Rock => (opp + 2) % 3 + 1, // lose
         .Paper => 3 + opp + 1, // draw

@@ -4,7 +4,7 @@ const util = @import("utility.zig");
 fn mapToBits(items: []const u8) u32 {
     var bits: u32 = 0;
     for (items) |c| {
-        bits |= @as(u32, 1) << @truncate(u5, c - 'a');
+        bits |= @as(u32, 1) << @truncate( c - 'a');
     }
     return bits;
 }
@@ -26,7 +26,7 @@ pub fn solve1(input: []const u8) u32 {
         }
     }
 
-    return if (idx == @truncate(u32, input.len - 4)) @truncate(u32, input.len) else idx + 4;
+    return if (idx == @as(u32, @truncate(input.len - 4))) @truncate( input.len) else idx + 4;
 }
 
 pub fn solve2(input: []const u8) u32 {
@@ -37,7 +37,7 @@ pub fn solve2(input: []const u8) u32 {
         }
     }
 
-    return if (idx > @truncate(u32, input.len - 14)) @truncate(u32, input.len) else idx + 14;
+    return if (idx > @as(u32, @truncate(input.len - 14))) @truncate( input.len) else idx + 14;
 }
 
 test "day-6" {
