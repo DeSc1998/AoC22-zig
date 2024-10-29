@@ -3,46 +3,36 @@ const std = @import("std");
 pub fn Stack(comptime T: type) type {
     return struct {
         stack: inner_stack,
-        allocator: std.mem.Allocator,
 
-        const inner_stack = std.atomic.Stack(T);
-        const node = inner_stack.Node;
+        const inner_stack = std.ArrayList(T);
         pub const Self = @This();
 
         pub fn init(allocator: std.mem.Allocator) Self {
-            return .{ .stack = inner_stack.init(), .allocator = allocator };
+            return .{ .stack = inner_stack.init(allocator) };
         }
 
         pub fn push(self: *Self, value: T) !void {
-            var n = try self.allocator.create(node);
-            n.data = value;
-            self.stack.push(n);
+            try self.stack.append(value);
         }
 
-        pub fn peek(self: *Self) ?*T {
-            if (self.stack.pop()) |n| {
-                var tmp = &n.data;
-                self.stack.push(n);
-                return tmp;
+        pub fn peek(self: *Self) ?T {
+            if (self.stack.items.len > 0) {
+                return self.stack.items[self.stack.items.len - 1];
             } else {
                 return null;
             }
         }
 
         pub fn pop(self: *Self) ?T {
-            if (self.stack.pop()) |n| {
-                var tmp = n.data;
-                self.allocator.destroy(n);
-                return tmp;
+            if (self.stack.items.len > 0) {
+                return self.stack.pop();
             } else {
                 return null;
             }
         }
 
         pub fn deinit(self: *Self) void {
-            while (self.stack.pop()) |n| {
-                self.allocator.destroy(n);
-            }
+            self.stack.deinit();
         }
     };
 }

@@ -99,7 +99,7 @@ fn mapDirectorySize(root: Directory, map: *std.ArrayList(File)) !void {
 }
 
 fn addToTop(stack: Stack, name: []const u8, entry: Entry) !void {
-    var top = if (stack.peek()) |dir| dir else return error.StackEmpty;
+    const top = if (stack.peek()) |dir| dir else return error.StackEmpty;
     try top.*.entries.put(name, entry);
 }
 
@@ -150,8 +150,8 @@ fn parse(input: []const u8) !Directory {
             defer entries.deinit();
 
             try util.splitByLines(command, &entries);
-            var dir = dir_stack.peek().?;
-            try collectEntries(entries, dir.*);
+            const dir = dir_stack.peek().?;
+            try collectEntries(entries, dir);
         } else {
             return error.UnkownCommand;
         }
@@ -161,7 +161,7 @@ fn parse(input: []const u8) !Directory {
 }
 
 fn getIndent(level: u32) ![]const u8 {
-    var buffer = try allocator.alloc(u8, level * 2);
+    const buffer = try allocator.alloc(u8, level * 2);
     for (buffer) |*item| {
         item.* = ' ';
     }

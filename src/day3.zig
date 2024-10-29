@@ -5,9 +5,9 @@ fn mapToBits(items: []const u8) u64 {
     var bits: u64 = 0;
     for (items) |c| {
         if (std.ascii.isUpper(c)) {
-            bits |= @as(u64, 1) << @truncate( c - 'A' + 26);
+            bits |= @as(u64, 1) << @truncate(c - 'A' + 26);
         } else {
-            bits |= @as(u64, 1) << @truncate( c - 'a');
+            bits |= @as(u64, 1) << @truncate(c - 'a');
         }
     }
     return bits;
@@ -19,9 +19,9 @@ fn bitIndex(x: u64) u32 {
 
 pub fn commonItemOfBag(bag: []const u8) u32 {
     const middle = bag.len / 2;
-    var left_bits = mapToBits(bag[0..middle]);
-    var right_bits = mapToBits(bag[middle..bag.len]);
-    var common_bits = left_bits & right_bits;
+    const left_bits = mapToBits(bag[0..middle]);
+    const right_bits = mapToBits(bag[middle..bag.len]);
+    const common_bits = left_bits & right_bits;
     return bitIndex(common_bits) + 1; // idxs 0 .. 51 -> 1 .. 52
 }
 
@@ -82,9 +82,9 @@ test "day-3" {
     var total: u32 = 0;
     for (bags.items) |bag| {
         const middle = bag.len / 2;
-        var left_bits = mapToBits(bag[0..middle]);
-        var right_bits = mapToBits(bag[middle..bag.len]);
-        var common_bits = left_bits & right_bits;
+        const left_bits = mapToBits(bag[0..middle]);
+        const right_bits = mapToBits(bag[middle..bag.len]);
+        const common_bits = left_bits & right_bits;
         total += bitIndex(common_bits) + 1;
     }
 
